@@ -230,10 +230,11 @@ module IssuesHelper
 
   def send_notification_option
     content_tag(:p,
-                content_tag(:label,
-                            l(:label_notify_member_plural), :for => 'send_notification') +
+#TURKIN hide "Email issue updates checkbox"
+                #content_tag(:label,
+                #            l(:label_notify_member_plural), :for => 'send_notification') +
                 hidden_field_tag('send_notification', '0', :id => nil) +
-                check_box_tag('send_notification', '1', true))
+                check_box_tag('send_notification', '1', true, :style=>"display:none;"))
 
 
   end

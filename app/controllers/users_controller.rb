@@ -70,8 +70,13 @@ class UsersController < ApplicationController
     @events_by_day = events.group_by(&:event_date)
 
     unless User.current.admin?
-      if !@user.active? || (@user != User.current  && @memberships.empty? && events.empty?)
-        render_404
+	  #01.04.2012 Turkin I. check if user is allowed to view_members
+	  # original
+      # if !@user.active? || (@user != User.current  && @memberships.empty? && events.empty?) 
+	  # new
+		if !@user.active? || (@user != User.current  && @memberships.empty? && events.empty?) || (!User.current.allowed_to?(:see_real_names, @memberships, :global => true) && @user.allowed_to?(:see_real_names, @memberships, :global => true))
+	  #end check
+			render_404
         return
       end
     end

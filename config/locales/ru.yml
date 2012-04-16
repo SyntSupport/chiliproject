@@ -387,7 +387,7 @@ ru:
   field_watcher: Наблюдатель
 
   general_csv_decimal_separator: ','
-  general_csv_encoding: UTF-8
+  general_csv_encoding: WINDOWS-1251
   general_csv_separator: ';'
   general_first_day_of_week: '1'
   general_lang_name: 'Russian (Русский)'

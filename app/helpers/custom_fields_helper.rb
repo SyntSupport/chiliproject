@@ -33,6 +33,16 @@ module CustomFieldsHelper
     field_name = "#{name}[custom_field_values][#{custom_field.id}]"
     field_id = "#{name}_custom_field_values_#{custom_field.id}"
 
+    if (custom_field.id == 9)
+      cust_field = CustomValue.find(:first, :conditions => "customized_id = #{@project.id} and custom_field_id = '10'")
+      if !cust_field.nil?      
+	  blank_option = custom_field.is_required? ?
+                       (custom_field.default_value.blank? ? "<option value=\"\">--- #{l(:actionview_instancetag_blank_option)} ---</option>" : '') :
+                       '<option></option>'
+         return select_tag(field_name, blank_option + options_for_select(cust_field.to_s.split(';'), custom_value.value), :id => field_id)
+      end
+    end
+
     field_format = Redmine::CustomFieldFormat.find_by_name(custom_field.field_format)
     case field_format.try(:edit_as)
     when "date"

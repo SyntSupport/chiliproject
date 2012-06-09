@@ -36,6 +36,11 @@ class Mailer < ActionMailer::Base
   #   issue_add(issue, 'user@example.com') => tmail object
   #   Mailer.deliver_issue_add(issue, 'user@example.com') => sends an email to 'user@example.com'
   def issue_add(issue, recipient)
+    #TURKIN change context to recipient
+    curr_user = User.current
+    User.current=(User.find_by_mail(recipient))
+    #TURKIN end
+
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,
                     'Issue-Author' => issue.author.login,
@@ -46,7 +51,11 @@ class Mailer < ActionMailer::Base
     subject "[#{issue.project.name} - #{issue.tracker.name} ##{issue.id}] (#{issue.status.name}) #{issue.subject}"
     body :issue => issue,
          :issue_url => url_for(:controller => 'issues', :action => 'show', :id => issue)
-    render_multipart('issue_add', body)
+    ret_value = render_multipart('issue_add', body)
+    #TURKIN change context back
+    User.current=curr_user
+    ret_value
+    #TURKIN end
   end
 
   # Builds a tmail object used to email recipients of the edited issue.
@@ -55,6 +64,13 @@ class Mailer < ActionMailer::Base
   #   issue_edit(journal, 'user@example.com') => tmail object
   #   Mailer.deliver_issue_edit(journal, 'user@example.com') => sends an email to issue recipients
   def issue_edit(journal, recipient)
+#	if recipient == "reporter1_00@mail.ru"
+#		return;
+#	end
+    #TURKIN change context to recipient
+    curr_user = User.current
+    User.current=(User.find_by_mail(recipient))
+    #TURKIN end
     issue = journal.journaled.reload
     redmine_headers 'Project' => issue.project.identifier,
                     'Issue-Id' => issue.id,
@@ -73,7 +89,11 @@ class Mailer < ActionMailer::Base
          :journal => journal,
          :issue_url => url_for(:controller => 'issues', :action => 'show', :id => issue)
 
-    render_multipart('issue_edit', body)
+    ret_value = render_multipart('issue_edit', body)
+    #TURKIN change context back
+    User.current=curr_user
+    ret_value
+    #TURKIN end
   end
 
   def reminder(user, issues, days)

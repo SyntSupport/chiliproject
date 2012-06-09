@@ -164,12 +164,23 @@ class User < Principal
 
   # Return user's full name for display
   def name(formatter = nil)
-    if formatter
-      eval('"' + (USER_FORMATS[formatter] || USER_FORMATS[:firstname_lastname]) + '"')
-    else
-      @name ||= eval('"' + (USER_FORMATS[Setting.user_format] || USER_FORMATS[:firstname_lastname]) + '"')
+     if !User.current.client? || self.client?
+		if formatter
+		  eval('"' + (USER_FORMATS[formatter] || USER_FORMATS[:firstname_lastname]) + '"')
+		else
+		  @name ||= eval('"' + (USER_FORMATS[Setting.user_format] || USER_FORMATS[:firstname_lastname]) + '"')
+		end
+	else 
+		"Syntellect"
     end
   end
+
+  def client?
+	if @isclient.nil?
+		@isclient = !self.allowed_to?(:see_real_names, @project, :global => true)
+	end
+	return @isclient
+  end	
 
   def active?
     self.status == STATUS_ACTIVE

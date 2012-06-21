@@ -182,7 +182,12 @@ private
     # INCORRECT: just_filename = File.basename(value.gsub('\\\\', '/'))
 
     # Finally, replace all non alphanumeric, hyphens or periods with underscore
-    @filename = just_filename.gsub(/[^\w\.\-]/,'_')
+    if RUBY_VERSION >= '1.9'
+      just_filename.force_encoding("UTF-8")
+      @filename = just_filename.gsub(/[^\.\-\p{Word}]/,'_')
+    else
+      @filename = just_filename.gsub(/[^\w\.\-]/,'_')
+    end 
   end
 
   # Returns an ASCII or hashed filename

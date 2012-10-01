@@ -31,7 +31,6 @@ module Redmine
       'text/x-ruby' => 'rb,rbw,ruby,rake,erb',
       'text/x-csh' => 'csh',
       'text/x-sh' => 'sh',
-      'text/xml' => 'xml,xsd,mxml',
       'text/yaml' => 'yml,yaml',
       'text/csv' => 'csv',
       'text/x-po' => 'po',
